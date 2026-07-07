@@ -82,7 +82,7 @@ with tab3:
         edited_df_main = st.data_editor(agg_main_list)
 
     st.header("Liste pour les autres produits", divider="green", text_alignment="center")
-    apero_list = func.read_and_merge("apero",("Ingrédients"))
+    apero_list = func.read_and_merge("apero",tuple("Ingrédients"))
 
     if apero_list.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")        
@@ -92,7 +92,7 @@ with tab3:
         edited_df_apero = st.data_editor(agg_apero_list)
             
 with tab4:
-    stuff_list = func.read_and_merge("other_stuff",("Objets"))
+    stuff_list = func.read_and_merge("other_stuff",tuple("Objets"))
 
     if stuff_list.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
