@@ -17,7 +17,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-creds = Credentials.from_service_account_file(
+creds = Credentials.from_service_account_info(
     st.secrets["gcp-service-account"],
     scopes=SCOPES,
 )
