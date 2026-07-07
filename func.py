@@ -17,22 +17,28 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-creds = Credentials.from_service_account_info(
-    st.secrets["gcp-service-account"],
-    scopes=SCOPES,
-)
+@st_cache_resource
+def get_spreadsheet():
+    creds = Credentials.from_service_account_info(
+        st.secrets["gcp-service-account"],
+        scopes=SCOPES,
+    )
 
-client = gspread.authorize(creds)
+    client = gspread.authorize(creds)
+    
+    return client.open_by_url("https://docs.google.com/spreadsheets/d/12HSo_myjERC3GOc8q9BkB8OiRFQLqsOF5hFCN02l4z0/edit?pli=1&gid=0#gid=0")
 
-spreadsheet = client.open_by_url("https://docs.google.com/spreadsheets/d/12HSo_myjERC3GOc8q9BkB8OiRFQLqsOF5hFCN02l4z0/edit?pli=1&gid=0#gid=0")
+spreadsheet = get_spreadsheet()
 
 #%% Google sheet functions
 
 #Common functions
+@st_cach_data(ttl=30)
 def get_worksheets_name():
     names = [ws.title for ws in spreadsheet.worksheets()]
     return names
 
+@st_cach_data(ttl=30)
 def get_recipes(ws):
     sheet = spreadsheet.worksheet(str(ws))
     if sheet.acell("A1").value != None :
@@ -49,6 +55,7 @@ def update_chart(chart,ws):
     sheet.update("A1",list)
     return
 
+@st_cach_data(ttl=30)
 def read_and_merge(sheet_type:str, columns):
     ws_title = get_worksheets_name()
     

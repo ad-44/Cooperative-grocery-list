@@ -54,6 +54,11 @@ with tab1:
         func.save_ingredients(user_name,edited_ingredients_df,"main_course")
         func.save_ingredients(user_name,edited_other_ingredients_df,"apero")
         func.save_ingredients(user_name,edited_other_df,"other_stuff")
+
+        func.get_worksheets_name.clear()
+        func.get_recipes.clear()
+        func.read_and_merge.clear()
+        
         st.success("Ta recette a été ajouté!")
 
 with tab2 :
