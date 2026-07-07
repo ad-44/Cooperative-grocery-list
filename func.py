@@ -17,7 +17,7 @@ SCOPES = [
 ]
 
 creds = Credentials.from_service_account_file(
-    "grocery-list-api-501616-745cc6befb87.json",
+    st.secrets["gcp-service-account"],
     scopes=SCOPES,
 )
 
