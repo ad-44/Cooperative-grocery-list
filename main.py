@@ -9,7 +9,7 @@ import numpy as np
 import streamlit as st
 import func 
 
-st.write("App started")
+
 #%% Interface
 st.title("La liste de :red[course] pour _Arêches_ ! :sunglasses:")
 
@@ -55,7 +55,7 @@ with tab1:
         func.save_ingredients(user_name,edited_other_ingredients_df,"apero")
         func.save_ingredients(user_name,edited_other_df,"other_stuff")
         st.success("Ta recette a été ajouté!")
-st.write("Before loading sheets")
+
 with tab2 :
     recipe_list = func.get_recipes("Recipes")
     df_recipe = pd.DataFrame(recipe_list)
@@ -95,4 +95,3 @@ with tab4:
     else:
         agg_stuff_list = func.aggregate_list_3(stuff_list)
         edited_df_stuff = st.data_editor(agg_stuff_list)
-st.write("After loading sheets")
