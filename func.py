@@ -38,7 +38,7 @@ def get_worksheets_name():
     names = [ws.title for ws in spreadsheet.worksheets()]
     return names
 
-@st_cache_data(ttl=30)
+@st.cache_data(ttl=30)
 def get_recipes(ws):
     sheet = spreadsheet.worksheet(str(ws))
     if sheet.acell("A1").value != None :
