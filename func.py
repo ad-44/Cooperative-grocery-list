@@ -17,7 +17,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-@st_cache_resource
+@st.cache_resource
 def get_spreadsheet():
     creds = Credentials.from_service_account_info(
         st.secrets["gcp-service-account"],
@@ -33,7 +33,7 @@ spreadsheet = get_spreadsheet()
 #%% Google sheet functions
 
 #Common functions
-@st_cach_data(ttl=30)
+@st.cach_data(ttl=30)
 def get_worksheets_name():
     names = [ws.title for ws in spreadsheet.worksheets()]
     return names
@@ -55,7 +55,7 @@ def update_chart(chart,ws):
     sheet.update("A1",list)
     return
 
-@st_cach_data(ttl=30)
+@st.cach_data(ttl=30)
 def read_and_merge(sheet_type:str, columns):
     ws_title = get_worksheets_name()
     
