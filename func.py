@@ -48,40 +48,83 @@ def get_recipes(ws):
 
     return list
 
-def update_chart(chart,ws):
+def update_chart(chart,ws,df_name):
     sheet = spreadsheet.worksheet(str(ws))
-    list = chart.to_numpy().tolist()
-    sheet.clear()
-    sheet.update("A1",list)
-    return
+    list_df = chart.to_numpy().tolist()
+    
+    if ws = "Recipes" and df_name="recipe":
+        sheet.clear()
+        sheet.update("A1",list_df)
+        return
+
+    elif ws = "Final_df" and df_name="main":
+        sheet.batch_clear(["A1:D"])
+        sheet.update("A1:D",list_df)
+        return
+
+    elif ws = "Final_df" and df_name="apero":
+        sheet.batch_clear(["F1:G"])
+        sheet.update("F1:G",list_df)
+        return
+
+    elif ws = "Final_df" and df_name="object":
+        sheet.batch_clear(["I1:J"])
+        sheet.update("I1:J", list_df)
+        return
 
 @st.cache_data(ttl=30)
-def read_and_merge(sheet_type:str):
-    
-    if sheet_type == "main_course":
-        columns = ["Ingrédients", "Quantité", "Unité de mesure"]
-    elif sheet_type == "apero":
-        columns = ["Ingrédients"]
-    elif sheet_type == "other_stuff":
-        columns = ["Objets"]
-    
-    dfs = pd.DataFrame()
+def read_merge_aggregate():
 
+    #Read and merge dataframe
+    dfs_recipe = pd.DataFrame()
+    dfs_other_food = pd.DataFrame()
+    dfs_objects = pd.DataFrame()
+
+    sheet_not_to_read = ["Recipes", "Final_food", "Final_other_food","Final_objects"]
+    
     for ws in spreadsheet.worksheets():
-        if sheet_type not in ws.title:
-            continue
 
-        values = ws.get_all_values()
-
-        if len(values) == 1 and len(values[0])==0:
+        if ws.title in sheet_not_to_read:
             continue
         
-        df = pd.DataFrame(values,columns=columns)    
-        name = ws.title.split("_")[0]
-        df['Personne'] = name
-        dfs = pd.concat([dfs,df], ignore_index=True)
+        values_recipe = ws.expand("A1")
+        values_other_food = ws.expand("E1")
+        values_objects = ws.expand("G1")
 
-    return dfs
+        name = ws.title
+
+        if [len(values) == 1 and len(values[0]) == 0 for values in [values_recipe, values_other_food, values_objects]]:
+            continue
+        
+        df_recipe = pd.DataFrame(values_recipe,columns=["Ingrédients","Quantité","Unité de mesure"])
+        df_recipe['Personne'] = name
+        df_other_food = pd.DataFrame(values_recipe,columns=["Articles"])
+        df_other_food['Personne'] = name
+        df_objects = pd.DataFrame(values_recipe,columns=["Objets"])
+        df_objects['Personne'] = name
+                
+        dfs_recipe = pd.concat([dfs_recipe,df_recipe], ignore_index=True)
+        dfs_other_food = pd.concat([dfs_other_food,df_other_food], ignore_index=True)
+        dfs_objects = pd.concat([dfs_objects,df_object], ignore_index=True)
+
+    #Aggregate dataframe
+    dfs_recipe_final = aggregate_lists(dfs_recipe)
+    dfs_other_food_final = aggregate_list_2(dfs_other_food)
+    dfs_objects_final = aggregate_list_3(dfs_objects)
+    
+    return dfs_recipe_final, dfs_other_food_final, dfs_objects_final
+
+def save_merge_data_to_sheet(df_recipe, df_other_food, df_objects):
+    sheet = spreadsheet.worksheet("Final_df")
+
+    sheet.clear()
+    sheet.update("A1:D", df_recipe)
+    sheet.update("F1:G", df_other_food)
+    sheet.update("I1:J", df_objects)
+
+    return
+
+    
 
 def aggregate_lists(df):
     df["Ingrédients"] = (df["Ingrédients"]
@@ -108,16 +151,17 @@ def aggregate_lists(df):
         )
     )
 
+    
     return final_df
 
 def aggregate_list_2(df):
-    df["Ingrédients"] = (df["Ingrédients"]
+    df["Articles"] = (df["Articles"]
         .str.strip()
         .str.lower()
         )
     
     final_df = (
-        df.groupby(["Ingrédients"], as_index=False)
+        df.groupby(["Articles"], as_index=False)
         .agg(
             Personne = ("Personne", lambda x: ", ".join(sorted(set(x))))
         )
@@ -169,23 +213,39 @@ def save_recipes(name, recipe):
   
 #Sheet for every person recipe
 
-def save_ingredients(name,df,ingredient_kind):
+def save_data_to_sheet(name, df_recipe, df_other_food, df_objects):
     name_norm = name.strip().lower()
     ws_names = get_worksheets_name()
 
-    if str(name_norm)+"_"+str(ingredient_kind) in ws_names :
-        sheet = spreadsheet.worksheet(str(name_norm)+"_"+str(ingredient_kind))
+    if str(name_norm) in ws_names :
+        sheet = spreadsheet.worksheet(str(name_norm))
     else :
-        sheet = spreadsheet.add_worksheet(title=str(name_norm)+"_"+str(ingredient_kind), rows=100, cols=10)
+        sheet = spreadsheet.add_worksheet(title=str(name_norm), rows=100, cols=10)
 
     if sheet.acell("A1").value != None :
-        list = sheet.get_all_values()
-        list.extend(df.to_numpy().tolist())
+        list_recipe = sheet.expand("A1")
+        list_recipe.extend(df_recipe.to_numpy().tolist())
     else:
-        list = df.to_numpy().tolist()
+        list_recipe = df_recipe.to_numpy().tolist()
+
+    if sheet.acell("E1").value != None:
+        list_other_food = sheet.expand("E1")
+        list_other_food.extend(df_other_food.to_numpy().tolist())
+    else:
+        list_other_food = df_recipe.to_numpy().tolist()
+
+    if sheet.acell("G1").value = None:
+        list_objects = sheet.expand("G1")
+        list_objects.extend(df_objects.to_numpy().tolist())
+    else:
+        list_objects = df_objects.to_numpy().tolist()
 
     sheet.clear()
-    sheet.update("A1",list)
+    
+    sheet.update("A1:C",list_recipe)
+    sheet.update("E1:E",list_other_food)
+    sheet.update("G1:G",list_objects)
+    
     return
 
 

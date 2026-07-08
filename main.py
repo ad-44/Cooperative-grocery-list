@@ -51,18 +51,18 @@ with tab1:
 
     if validate_button :
         list_error = [user_name,recipe_name]
-        if any(item is None for item in list_error):
+        if any(not item for item in list_error):
             st.error("Tu as oublié de remplir ton prénom ou ton plat!", icon=":material/error:")
             st.stop()
             
         func.save_recipes(user_name,recipe_name)
-        func.save_ingredients(user_name,edited_ingredients_df,"main_course")
-        func.save_ingredients(user_name,edited_other_ingredients_df,"apero")
-        func.save_ingredients(user_name,edited_other_df,"other_stuff")
+        func.save_data_to_sheet(user_name, edited_ingredients_df, edited_other_ingredients_df,edited_other_df)
+        main_df, apero_df, object_df = func.read_merge_aggregate()
+        func.save_merge_data_to_sheet(main_df,apero_df,object_df)
 
         func.get_worksheets_name.clear()
         func.get_recipes.clear()
-        func.read_and_merge.clear()
+        func.read_merge_aggregate.clear()
         
         st.success("Ta recette a été ajouté!")
 
@@ -70,38 +70,47 @@ with tab2 :
     recipe_list = func.get_recipes("Recipes")
     df_recipe = pd.DataFrame(recipe_list)
     edited_df_recipe = st.data_editor(df_recipe)
+
+    update_recipe_button = st.button("Sauvegarde les changements! :floppy_disk:", type="primary")
  
-    if not edited_df_recipe.equals(df_recipe):
-        func.update_chart(edited_df_recipe,"Recipes")
+    if update_recipe_button:
+        func.update_chart(edited_df_recipe,"Recipes","recipe")
     
 
 with tab3:
     st.header("Liste de course pour les plats principaux", divider="green", text_alignment="center")
-    main_list = func.read_and_merge("main_course")
 
-    if main_list.empty == True:
+    if main_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
         
     else:
-        agg_main_list = func.aggregate_lists(main_list)
-        edited_df_main = st.data_editor(agg_main_list)
+        edited_df_main = st.data_editor(main_df)
+        update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
+
+        if update_food_button :
+            func.update_chart(edited_df_main,"Final_df","main")
 
     st.header("Liste pour les autres produits", divider="green", text_alignment="center")
-    apero_list = func.read_and_merge("apero")
 
-    if apero_list.empty == True:
+    if apero_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")        
 
     else:
-        agg_apero_list = func.aggregate_list_2(apero_list)
-        edited_df_apero = st.data_editor(agg_apero_list)
-            
-with tab4:
-    stuff_list = func.read_and_merge("other_stuff")
+        edited_df_apero = st.data_editor(apero_df)
+        update_apero_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
 
-    if stuff_list.empty == True:
+        if update_apero_button :
+        func.update_chart(edited_df_apero,"Final_df","apero")
+           
+with tab4:
+    
+    if object_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
         
     else:
-        agg_stuff_list = func.aggregate_list_3(stuff_list)
-        edited_df_stuff = st.data_editor(agg_stuff_list)
+        edited_df_object = st.data_editor(object_df)
+        
+        update_object_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
+
+        if update_object_button :
+            func.update_chart(edited_df_object,"Final_df","object")
