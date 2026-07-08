@@ -143,21 +143,23 @@ def aggregate_list_3(df):
 #Sheet with names + recipes
 def save_recipes(name, recipe):
     sheet = spreadsheet.worksheet("Recipes")
-    if sheet.acell("A1").value != None :
-        list = sheet.get_all_values()
-    else :
-        list = []
 
-    if len(list) != 0 :
-        for item in list:
-            if str(name) in item:
-                index = list.index(item)
-                list[index] = [name,recipe]
-            else :
-                list.append([name,recipe])
-    else :
-        list.append([name,recipe])
-             
+    values = sheet.get_all_values()
+
+    if values == [[]]:
+        values = []
+
+    found = False
+
+    for i, row in enumerate(values):
+        if row and row[0] == name:
+            values[i] = [name, recipe]
+            found = True
+            break
+
+    if not found:
+        values.append([name, recipe])             
+        
     sheet.clear()
     sheet.update("A1",list)
     return
