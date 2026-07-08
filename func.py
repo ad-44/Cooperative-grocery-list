@@ -160,9 +160,10 @@ def save_recipes(name, recipe):
 
     if not found:
         values.append([name, recipe])             
-        
+    print(values)
     sheet.clear()
     sheet.update("A1",values)
+    print(values)
     return
 
   
