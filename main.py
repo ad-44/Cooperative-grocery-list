@@ -50,6 +50,11 @@ with tab1:
     validate_button = st.button("J'ai fini ma liste ! :confetti_ball: :tada:", type="primary")
 
     if validate_button :
+        list_error = [user_name,recipe_name]
+        if any(item is None for item in list_error):
+            st.error("Tu as oublié de remplir ton prénom ou ton plat!", icon=":material/error:")
+            st.stop()
+            
         func.save_recipes(user_name,recipe_name)
         func.save_ingredients(user_name,edited_ingredients_df,"main_course")
         func.save_ingredients(user_name,edited_other_ingredients_df,"apero")

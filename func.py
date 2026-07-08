@@ -142,6 +142,7 @@ def aggregate_list_3(df):
 
 #Sheet with names + recipes
 def save_recipes(name, recipe):
+    name_norm = name.strip().lower()
     sheet = spreadsheet.worksheet("Recipes")
 
     values = sheet.get_all_values()
@@ -152,7 +153,7 @@ def save_recipes(name, recipe):
     found = False
 
     for i, row in enumerate(values):
-        if row and row[0] == name:
+        if row and row[0].strip().lower() == name_norm:
             values[i] = [name, recipe]
             found = True
             break
@@ -168,12 +169,13 @@ def save_recipes(name, recipe):
 #Sheet for every person recipe
 
 def save_ingredients(name,df,ingredient_kind):
+    name_norm = name.strip().lower()
     ws_names = get_worksheets_name()
 
-    if str(name)+"_"+str(ingredient_kind) in ws_names :
-        sheet = spreadsheet.worksheet(str(name)+"_"+str(ingredient_kind))
+    if str(name_norm)+"_"+str(ingredient_kind) in ws_names :
+        sheet = spreadsheet.worksheet(str(name_norm)+"_"+str(ingredient_kind))
     else :
-        sheet = spreadsheet.add_worksheet(title=str(name)+"_"+str(ingredient_kind), rows=100, cols=10)
+        sheet = spreadsheet.add_worksheet(title=str(name_norm)+"_"+str(ingredient_kind), rows=100, cols=10)
 
     if sheet.acell("A1").value != None :
         list = sheet.get_all_values()
