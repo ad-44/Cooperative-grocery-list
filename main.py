@@ -72,8 +72,7 @@ with tab2 :
 
 with tab3:
     st.header("Liste de course pour les plats principaux", divider="green", text_alignment="center")
-    columns_main_list = ("Ingrédients", "Quantité", "Unité de mesure")
-    main_list = func.read_and_merge("main_course",columns_main_list)
+    main_list = func.read_and_merge("main_course")
 
     if main_list.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
@@ -83,8 +82,7 @@ with tab3:
         edited_df_main = st.data_editor(agg_main_list)
 
     st.header("Liste pour les autres produits", divider="green", text_alignment="center")
-    columns_apero_list = ("Ingrédients")
-    apero_list = func.read_and_merge("apero",columns_apero_list)
+    apero_list = func.read_and_merge("apero")
 
     if apero_list.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")        
@@ -94,8 +92,7 @@ with tab3:
         edited_df_apero = st.data_editor(agg_apero_list)
             
 with tab4:
-    columns_stuff_list = ("Objets")
-    stuff_list = func.read_and_merge("other_stuff",columns_stuff_list)
+    stuff_list = func.read_and_merge("other_stuff")
 
     if stuff_list.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")

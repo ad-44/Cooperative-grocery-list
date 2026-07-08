@@ -56,8 +56,14 @@ def update_chart(chart,ws):
     return
 
 @st.cache_data(ttl=30)
-def read_and_merge(sheet_type:str, columns:tuple):
-    ws_title = get_worksheets_name()
+def read_and_merge(sheet_type:str):
+    
+    if sheet_type == "main_course":
+        columns = ["Ingrédients", "Quantité", "Unité de mesure"]
+    elif sheet_type == "apero":
+        columns = ["Ingrédients"]
+    elif sheet_type == "other_stuff":
+        columns = ["Objets"]
     
     dfs = pd.DataFrame()
 
