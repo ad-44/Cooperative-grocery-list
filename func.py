@@ -161,7 +161,7 @@ def save_recipes(name, recipe):
         values.append([name, recipe])             
         
     sheet.clear()
-    sheet.update("A1",list)
+    sheet.update("A1",values)
     return
 
   
