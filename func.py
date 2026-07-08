@@ -35,7 +35,7 @@ spreadsheet = get_spreadsheet()
 #Common functions
 @st.cache_data(ttl=30)
 def get_worksheets_name():
-    names = [ws.title for ws in spreadsheet.worksheets()]
+    names = [ws.title.strip().lower() for ws in spreadsheet.worksheets()]
     return names
 
 @st.cache_data(ttl=30)
