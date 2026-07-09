@@ -142,7 +142,7 @@ def check_values(values):
 @st.cache_data(ttl=30)
 def read_merge_aggregate():
 
-    #Read and merge dataframe
+    #Read dataframe
     dfs_recipe = pd.DataFrame()
     dfs_other_food = pd.DataFrame()
     dfs_objects = pd.DataFrame()
@@ -167,6 +167,7 @@ def read_merge_aggregate():
         ]):
             continue
         
+        #Merge dataframe
         if values_recipe:
             df_recipe = pd.DataFrame(values_recipe,columns=["Ingrédients","Quantité","Unité de mesure"])
             df_recipe['Personne'] = name
@@ -183,10 +184,21 @@ def read_merge_aggregate():
             dfs_objects = pd.concat([dfs_objects,df_objects], ignore_index=True)                
         
     #Aggregate dataframe
-    dfs_recipe_final = aggregate_lists(dfs_recipe)
-    dfs_other_food_final = aggregate_list_2(dfs_other_food)
-    dfs_objects_final = aggregate_list_3(dfs_objects)
-    
+    if not dfs_recipes.empty:
+        dfs_recipe_final = aggregate_lists(dfs_recipe)
+    else:
+        dfs_recipe_final = pd.DataFrame(columns=["Ingrédients","Quantité","Unité de mesure"])
+
+    if not dfs_other_food.empty:
+        dfs_other_food_final = aggregate_list_2(dfs_other_food)
+    else:
+        dfs_other_food_final = pd.DataFrame(columns=['Articles'])
+        
+    if not dfs_objects.empty:
+        dfs_objects_final = aggregate_list_3(dfs_objects)
+    else:
+        dfs_objects_final = pd.DataFrame(columns=["Objets"])
+        
     return dfs_recipe_final, dfs_other_food_final, dfs_objects_final
 
 def save_merge_data_to_sheet(df_recipe, df_other_food, df_objects):
