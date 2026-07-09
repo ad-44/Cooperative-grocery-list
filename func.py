@@ -131,6 +131,11 @@ def update_chart(chart,ws,df_name):
         sheet.update("I1:J", list_df)
         return
 
+def check_values(values):
+    if not values:
+        values = []
+    return values
+
 @st.cache_data(ttl=30)
 def read_merge_aggregate():
 
@@ -146,9 +151,9 @@ def read_merge_aggregate():
         if ws.title in sheet_not_to_read:
             continue
         
-        values_recipe = ws.get("A:C")
-        values_other_food = ws.get("E:E")
-        values_objects = ws.get("G:G")
+        values_recipe = check_values(ws.get("A:C"))
+        values_other_food = check_values(ws.get("E:E"))
+        values_objects = check_values(ws.get("G:G"))
 
         name = ws.title
 
@@ -159,17 +164,21 @@ def read_merge_aggregate():
         ]):
             continue
         
-        df_recipe = pd.DataFrame(values_recipe,columns=["Ingrédients","Quantité","Unité de mesure"])
-        df_recipe['Personne'] = name
-        df_other_food = pd.DataFrame(values_other_food,columns=["Articles"])
-        df_other_food['Personne'] = name
-        df_objects = pd.DataFrame(values_objects,columns=["Objets"])
-        df_objects['Personne'] = name
-                
-        dfs_recipe = pd.concat([dfs_recipe,df_recipe], ignore_index=True)
-        dfs_other_food = pd.concat([dfs_other_food,df_other_food], ignore_index=True)
-        dfs_objects = pd.concat([dfs_objects,df_objects], ignore_index=True)
+        if values_recipes:
+            df_recipe = pd.DataFrame(values_recipe,columns=["Ingrédients","Quantité","Unité de mesure"])
+            df_recipe['Personne'] = name
+            dfs_recipe = pd.concat([dfs_recipe,df_recipe], ignore_index=True)
 
+        if values_other_food:
+            df_other_food = pd.DataFrame(values_other_food,columns=["Articles"])
+            df_other_food['Personne'] = name
+            dfs_other_food = pd.concat([dfs_other_food,df_other_food], ignore_index=True)
+            
+        if values_objects:
+            df_objects = pd.DataFrame(values_objects,columns=["Objets"])
+            df_objects['Personne'] = name
+            dfs_objects = pd.concat([dfs_objects,df_objects], ignore_index=True)                
+        
     #Aggregate dataframe
     dfs_recipe_final = aggregate_lists(dfs_recipe)
     dfs_other_food_final = aggregate_list_2(dfs_other_food)
@@ -271,11 +280,10 @@ def save_recipes(name, recipe):
             break
 
     if not found:
-        values.append([name, recipe])             
-    print(values)
+        values.append([name, recipe])
+                 
     sheet.clear()
     sheet.update("A1",values)
-    print(values)
     return
 
   
