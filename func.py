@@ -290,19 +290,19 @@ def save_data_to_sheet(name, df_recipe, df_other_food, df_objects):
     else :
         sheet = spreadsheet.add_worksheet(title=str(name_norm), rows=100, cols=10)
 
-    list_recipe = sheet.expand("A1")
+    list_recipe = sheet.get("A:C")
     if not list_recipe:
         list_recipe.extend(df_recipe.to_numpy().tolist())
     else:
         list_recipe = df_recipe.to_numpy().tolist()
 
-    list_other_food = sheet.expand("E1")
+    list_other_food = sheet.get("E:E")
     if not list_other_food:
         list_other_food.extend(df_other_food.to_numpy().tolist())
     else:
         list_other_food = df_other_food.to_numpy().tolist()
 
-    list_objects = sheet.expand("G1")
+    list_objects = sheet.get("G:G")
     if not list_objects:
         list_objects.extend(df_objects.to_numpy().tolist())
     else:
