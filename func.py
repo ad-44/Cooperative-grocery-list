@@ -163,7 +163,7 @@ def read_merge_aggregate():
         df_recipe['Personne'] = name
         df_other_food = pd.DataFrame(values_other_food,columns=["Articles"])
         df_other_food['Personne'] = name
-        df_objects = pd.DataFrame(values_object,columns=["Objets"])
+        df_objects = pd.DataFrame(values_objects,columns=["Objets"])
         df_objects['Personne'] = name
                 
         dfs_recipe = pd.concat([dfs_recipe,df_recipe], ignore_index=True)
