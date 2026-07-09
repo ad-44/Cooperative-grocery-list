@@ -134,6 +134,9 @@ def update_chart(chart,ws,df_name):
 def check_values(values):
     if not values:
         values = []
+
+    values = [row for row in values if any(str(cell).strip() for cell in row)]
+
     return values
 
 @st.cache_data(ttl=30)
