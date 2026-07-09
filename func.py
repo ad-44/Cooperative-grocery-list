@@ -52,10 +52,20 @@ def get_recipes(ws):
 def read_final_main_df():
     sheet = spreadsheet.worksheet("Final_df")
 
-    main = pd.DataFrame(
-        sheet.get("A:D"),
-        columns=["Ingrédients","Quantités","Unité de mesure","Personne"]
-    )
+    values = sheet.get("A:D")
+
+    if not values or values == [[]]:
+        
+        main = pd.DataFrame(
+            columns=["Ingrédients","Quantités","Unité de mesure","Personne"]
+        )
+
+    else:
+
+        main = pd.DataFrame(
+            values,
+            columns = ["Ingrédients","Quantités","Unité de mesure","Personne"]
+        )
 
     return main
 
@@ -63,10 +73,18 @@ def read_final_main_df():
 def read_final_apero_df():
     sheet = spreadsheet.worksheet("Final_df")
 
-    main = pd.DataFrame(
-        sheet.get("F:G"),
-        columns=["Articles","Personne"]
-    )
+    values = sheet.get("F:G")
+
+    if not values or values == [[]]:
+        main = pd.DataFrame(
+            columns=["Articles","Personne"]
+        )
+        
+    else:   
+        main = pd.DataFrame(
+            sheet.get("F:G"),
+            columns=["Articles","Personne"]
+        )
 
     return main
 
@@ -74,10 +92,18 @@ def read_final_apero_df():
 def read_final_objects_df():
     sheet = spreadsheet.worksheet("Final_df")
 
-    main = pd.DataFrame(
-        sheet.get("I:J"),
-        columns=["Objets","Personne"]
-    )
+    values = sheet.get("I:J")
+
+    if not values or values = [[]]:
+        main = pd.DataFrame(
+            columns=["Objets","Personne"]
+        )
+
+    else:   
+        main = pd.DataFrame(
+            sheet.get("I:J"),
+            columns=["Objets","Personne"]
+        )
 
     return main
 
