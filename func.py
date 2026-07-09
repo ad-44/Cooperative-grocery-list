@@ -164,7 +164,7 @@ def read_merge_aggregate():
         ]):
             continue
         
-        if values_recipes:
+        if values_recipe:
             df_recipe = pd.DataFrame(values_recipe,columns=["Ingrédients","Quantité","Unité de mesure"])
             df_recipe['Personne'] = name
             dfs_recipe = pd.concat([dfs_recipe,df_recipe], ignore_index=True)
