@@ -80,6 +80,8 @@ with tab2 :
 with tab3:
     st.header("Liste de course pour les plats principaux", divider="green", text_alignment="center")
 
+    main_df = func.read_final_main_df()
+
     if main_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
         
@@ -92,6 +94,8 @@ with tab3:
 
     st.header("Liste pour les autres produits", divider="green", text_alignment="center")
 
+    apero_df = func.read_final_apero_df()
+
     if apero_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")        
 
@@ -100,9 +104,11 @@ with tab3:
         update_apero_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
 
         if update_apero_button :
-        func.update_chart(edited_df_apero,"Final_df","apero")
+            func.update_chart(edited_df_apero,"Final_df","apero")
            
 with tab4:
+    
+    object_df = func.read_final_objects_df()
     
     if object_df.empty == True:
         st.text("Personne n'a complété la liste pour le moment.")
