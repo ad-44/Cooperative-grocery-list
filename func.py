@@ -94,7 +94,7 @@ def read_final_objects_df():
 
     values = sheet.get("I:J")
 
-    if not values or values = [[]]:
+    if not values or values == [[]]:
         main = pd.DataFrame(
             columns=["Objets","Personne"]
         )
