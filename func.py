@@ -184,7 +184,7 @@ def read_merge_aggregate():
             dfs_objects = pd.concat([dfs_objects,df_objects], ignore_index=True)                
         
     #Aggregate dataframe
-    if not dfs_recipes.empty:
+    if not dfs_recipe.empty:
         dfs_recipe_final = aggregate_lists(dfs_recipe)
     else:
         dfs_recipe_final = pd.DataFrame(columns=["Ingrédients","Quantité","Unité de mesure"])
