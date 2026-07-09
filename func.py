@@ -186,9 +186,9 @@ def save_merge_data_to_sheet(df_recipe, df_other_food, df_objects):
                           "I:J"
                       ])
     
-    sheet.update("A1:D", df_recipe)
-    sheet.update("F1:G", df_other_food)
-    sheet.update("I1:J", df_objects)
+    sheet.update("A1:D", df_recipe.to_numpy().tolist())
+    sheet.update("F1:G", df_other_food.to_numpy().tolist())
+    sheet.update("I1:J", df_objects.to_numpy().tolist())
 
     return
 
