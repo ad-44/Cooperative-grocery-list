@@ -50,19 +50,22 @@ with tab1:
     validate_button = st.button("J'ai fini ma liste ! :confetti_ball: :tada:", type="primary",key="main_button")
 
     if validate_button :
-        list_error = [user_name,recipe_name]
-        if any(not item for item in list_error):
-            st.error("Tu as oublié de remplir ton prénom ou ton plat!", icon=":material/error:")
-            st.stop()
-            
-        func.save_recipes(user_name,recipe_name)
-        func.save_data_to_sheet(user_name, edited_ingredients_df, edited_other_ingredients_df,edited_other_df)
-        main_df, apero_df, object_df = func.read_merge_aggregate()
-        func.save_merge_data_to_sheet(main_df,apero_df,object_df)
+        with st.spinner("Traitement en cours...", show_time=True):
+            list_error = [user_name,recipe_name]
+            if any(not item for item in list_error):
+                st.error("Tu as oublié de remplir ton prénom ou ton plat!", icon=":material/error:")
+                st.stop()
+        
+            func.save_recipes(user_name,recipe_name)
+            func.save_data_to_sheet(user_name, edited_ingredients_df, edited_other_ingredients_df,edited_other_df)
+            main_df, apero_df, object_df = func.read_merge_aggregate()
+            func.save_merge_data_to_sheet(main_df,apero_df,object_df)
 
-        func.get_worksheets_name.clear()
-        func.get_recipes.clear()
-        func.read_merge_aggregate.clear()
+            func.get_worksheets_name.clear()
+            func.get_recipes.clear()
+            func.read_merge_aggregate.clear()
+
+            st.rerun()
         
         st.success("Ta recette a été ajouté!")
 
