@@ -47,7 +47,7 @@ with tab1:
     edited_other_df = st.data_editor(other_df, num_rows="dynamic")
 
     st.space("medium")
-    validate_button = st.button("J'ai fini ma liste ! :confetti_ball: :tada:", type="primary")
+    validate_button = st.button("J'ai fini ma liste ! :confetti_ball: :tada:", type="primary",key="main_button")
 
     if validate_button :
         list_error = [user_name,recipe_name]
@@ -71,7 +71,7 @@ with tab2 :
     df_recipe = pd.DataFrame(recipe_list)
     edited_df_recipe = st.data_editor(df_recipe)
 
-    update_recipe_button = st.button("Sauvegarde les changements! :floppy_disk:", type="primary")
+    update_recipe_button = st.button("Sauvegarde les changements! :floppy_disk:", type="primary", key="update_recipe")
  
     if update_recipe_button:
         func.update_chart(edited_df_recipe,"Recipes","recipe")
@@ -87,7 +87,7 @@ with tab3:
         
     else:
         edited_df_main = st.data_editor(main_df)
-        update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
+        update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary",key="update_food")
 
         if update_food_button :
             func.update_chart(edited_df_main,"Final_df","main")
@@ -101,7 +101,7 @@ with tab3:
 
     else:
         edited_df_apero = st.data_editor(apero_df)
-        update_apero_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
+        update_apero_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary", key="update_apero")
 
         if update_apero_button :
             func.update_chart(edited_df_apero,"Final_df","apero")
@@ -116,7 +116,7 @@ with tab4:
     else:
         edited_df_object = st.data_editor(object_df)
         
-        update_object_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary")
+        update_object_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary",key="update_objects")
 
         if update_object_button :
             func.update_chart(edited_df_object,"Final_df","object")
