@@ -146,9 +146,9 @@ def read_merge_aggregate():
         if ws.title in sheet_not_to_read:
             continue
         
-        values_recipe = ws.expand("A1")
-        values_other_food = ws.expand("E1")
-        values_objects = ws.expand("G1")
+        values_recipe = ws.get("A:C")
+        values_other_food = ws.get("E:E")
+        values_objects = ws.get("G:G")
 
         name = ws.title
 
