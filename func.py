@@ -139,7 +139,7 @@ def read_merge_aggregate():
     dfs_other_food = pd.DataFrame()
     dfs_objects = pd.DataFrame()
 
-    sheet_not_to_read = ["Recipes", "Final_food", "Final_other_food","Final_objects"]
+    sheet_not_to_read = ["Recipes", "Final_df"]
     
     for ws in spreadsheet.worksheets():
 
