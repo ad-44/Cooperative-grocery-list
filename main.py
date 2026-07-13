@@ -106,7 +106,7 @@ with tab3:
             update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary",key="update_food")
         with col2:
             export_data = func.export_to_excel()
-            st.download_button("Télécharge la liste (.xlsx)", export_data, file_name="liste_de_course.xlsx", icon=":materiel/download:")
+            st.download_button("Télécharge la liste (.xlsx)", export_data, file_name="liste_de_course.xlsx", icon=":material/download:")
             
         if update_food_button :
             func.update_chart(edited_df_main,"Final_df","main")
