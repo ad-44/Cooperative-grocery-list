@@ -27,9 +27,20 @@ with tab1:
 
     # Input ingredients recipe
     ingredients_df = pd.DataFrame(columns=["Ingrédients","Quantité","Unité de mesure"])
-    
+
+    units = [
+        "",
+        "g",
+        "kg",
+        "mL",
+        "L",
+        "pièce",
+        "boîte",
+        "bouteille",
+    ]
+        
     st.header("Ingrédients pour ta recette :carrot: :cucumber: :eggplant:", divider="green", text_alignment="center")
-    edited_ingredients_df = st.data_editor(ingredients_df, num_rows="dynamic")
+    edited_ingredients_df = st.data_editor(ingredients_df, num_rows="dynamic",column_config={"Unité de mesure":st.column_config.SelectboxColumn("Unité de mesure",options=units,required=False)})
 
     # Input other ingredients
     other_ingredients_df = pd.DataFrame(columns=["Items"])
