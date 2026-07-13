@@ -9,6 +9,7 @@ import numpy as np
 import gspread
 import streamlit as st
 from google.oauth2.service_account import Credentials
+from io import BytesIO
 
 
 #%% Access google sheet
@@ -343,6 +344,19 @@ def save_data_to_sheet(name, df_recipe, df_other_food, df_objects):
     
     return
 
+#Export functions
 
+def export_to_excel():
+    main_df = read_final_main_df()
+    apero_df = read_final_apero_df()
+    objects_df = read_final_objects_df()
 
+    buffer = BytesIO()
+
+    with pd.ExcelWriter(buffer, engine="xlsxwriter") as w :
+        main_df.to_excel(w, sheet_name="Courses", startrow=0, startcol=0)
+        apero_df.to_excel(w, sheet_name="Courses", startrow=0, startcol=5)
+        objects_df.to_excel(w, sheet_name="Objets", startrow=0, startcol=0)
+
+    return buffer
     

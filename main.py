@@ -93,7 +93,8 @@ with tab2 :
 
 with tab3:
     st.header("Liste de course pour les plats principaux", divider="green", text_alignment="center")
-
+    col1, col2 = st.columns([0.5,0.5], gap="large", vertical_alignment="bottom")
+    
     main_df = func.read_final_main_df()
 
     if main_df.empty == True:
@@ -101,8 +102,12 @@ with tab3:
         
     else:
         edited_df_main = st.data_editor(main_df)
-        update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary",key="update_food")
-
+        with col1:
+            update_food_button = st.button("Sauvegard les changements! :floppy_disk:", type="primary",key="update_food")
+        with col2:
+            export_data = func.export_to_excel()
+            st.download_button("Télécharge la liste (.xlsx)", export_data, file_name="liste_de_course.xlsx", icon=":materiel/download:")
+            
         if update_food_button :
             func.update_chart(edited_df_main,"Final_df","main")
 
