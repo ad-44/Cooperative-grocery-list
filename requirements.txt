@@ -3,3 +3,4 @@ pandas
 streamlit
 gspread
 google-auth
+xlsxwriter
