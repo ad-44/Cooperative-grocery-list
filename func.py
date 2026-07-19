@@ -244,7 +244,11 @@ def aggregate_lists(df):
         )
     )
 
-    
+    # Reorder the columns
+    final_df = final_df[
+        ["Ingrédients", "Quantité", "Unité de mesure", "Personne"]
+    ]
+            
     return final_df
 
 def aggregate_list_2(df):
