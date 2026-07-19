@@ -155,9 +155,9 @@ def read_merge_aggregate():
         if ws.title in sheet_not_to_read:
             continue
         
-        values_recipe = check_values(ws.get("A:C"))
-        values_other_food = check_values(ws.get("E:E"))
-        values_objects = check_values(ws.get("G:G"))
+        values_recipe = normalize_rows(check_values(ws.get("A:C")),3)
+        values_other_food = normalize_rows(check_values(ws.get("E:E")),1)
+        values_objects = normalize_rows(check_values(ws.get("G:G")),1)
 
         name = ws.title
 
@@ -343,6 +343,31 @@ def save_data_to_sheet(name, df_recipe, df_other_food, df_objects):
     sheet.update("G1:G",list_objects)
     
     return
+
+#Normalizing dataframes rows
+def normalize_rows(values, ncols):
+    if not values:
+        return []
+
+    cleaned = []
+
+    for row in values:
+        # Skip completely empty rows
+        if not any(str(cell).strip() for cell in row):
+            continue
+
+        row = list(row)
+
+        # Pad missing columns
+        while len(row) < ncols:
+            row.append("")
+
+        # Trim extra columns
+        row = row[:ncols]
+
+        cleaned.append(row)
+
+    return cleaned
 
 #Export functions
 
